@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ProjectapplyMapper">
+
+    <sql id="Base_Column_List">
+        id,user_id,content,time,file,status,descr
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.Projectapply">
+        select projectapply.*, user.name as userName
+        from projectapply
+        left join user on projectapply.user_id = user.id
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="status != null"> and status = #{status}</if>
+            <if test="userId != null"> and user_id = #{userId}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Projectapply">
+        select
+        <include refid="Base_Column_List" />
+        from projectapply
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from projectapply
+        where  id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Projectapply" useGeneratedKeys="true">
+        insert into projectapply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="content != null">content,</if>
+            <if test="time != null">time,</if>
+            <if test="file != null">file,</if>
+            <if test="status != null">status,</if>
+            <if test="descr != null">descr,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="time != null">#{time},</if>
+            <if test="file != null">#{file},</if>
+            <if test="status != null">#{status},</if>
+            <if test="descr != null">#{descr},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Projectapply">
+        update projectapply
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="time != null">
+                time = #{time},
+            </if>
+            <if test="file != null">
+                file = #{file},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="descr != null">
+                descr = #{descr},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
